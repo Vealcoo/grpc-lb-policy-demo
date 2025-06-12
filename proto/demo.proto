@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package demo;
+
+option go_package = ".;proto";
+
+service DemoService {
+  rpc Ping(PingRequest) returns (PingReply);
+  rpc Panic(PanicRequest) returns (PanicReply);
+}
+
+message PingRequest {}
+message PingReply {}
+
+message PanicRequest {}
+message PanicReply {}

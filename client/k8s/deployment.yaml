@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-client
+  namespace: demo
+  labels:
+    app: demo-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-client
+  template:
+    metadata:
+      labels:
+        app: demo-client
+    spec:
+      containers:
+        - name: container-ca9mwz
+          image: "demo-client:latest"
+          ports:
+            - name: grpc
+              containerPort: 8082
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+  strategy:
+    type: RollingUpdate
