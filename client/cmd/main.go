@@ -49,6 +49,6 @@ func main() {
 		end := time.Now()
 		round++
 		log.Info().TimeDiff("cost_time", end, start).Int64("round", round).Msg("send request")
-		time.Sleep(1000 * time.Millisecond)
+		time.Sleep(5000 * time.Millisecond)
 	}
 }
