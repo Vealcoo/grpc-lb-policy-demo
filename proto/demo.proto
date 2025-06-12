@@ -8,6 +8,7 @@ service DemoService {
   rpc Ping(PingRequest) returns (PingReply);
   rpc Panic(PanicRequest) returns (PanicReply);
   rpc CustomCode(CustomCodeRequest) returns (CustomCodeReply);
+  rpc Retry(RetryRequest) returns (RetryReply);
 }
 
 message PingRequest {}
@@ -21,3 +22,6 @@ message CustomCodeRequest {
   string message = 2;
 }
 message CustomCodeReply {}
+
+message RetryRequest {}
+message RetryReply {}

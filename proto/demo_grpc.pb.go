@@ -22,6 +22,7 @@ const (
 	DemoService_Ping_FullMethodName       = "/demo.DemoService/Ping"
 	DemoService_Panic_FullMethodName      = "/demo.DemoService/Panic"
 	DemoService_CustomCode_FullMethodName = "/demo.DemoService/CustomCode"
+	DemoService_Retry_FullMethodName      = "/demo.DemoService/Retry"
 )
 
 // DemoServiceClient is the client API for DemoService service.
@@ -31,6 +32,7 @@ type DemoServiceClient interface {
 	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingReply, error)
 	Panic(ctx context.Context, in *PanicRequest, opts ...grpc.CallOption) (*PanicReply, error)
 	CustomCode(ctx context.Context, in *CustomCodeRequest, opts ...grpc.CallOption) (*CustomCodeReply, error)
+	Retry(ctx context.Context, in *RetryRequest, opts ...grpc.CallOption) (*RetryReply, error)
 }
 
 type demoServiceClient struct {
@@ -68,6 +70,15 @@ func (c *demoServiceClient) CustomCode(ctx context.Context, in *CustomCodeReques
 	return out, nil
 }
 
+func (c *demoServiceClient) Retry(ctx context.Context, in *RetryRequest, opts ...grpc.CallOption) (*RetryReply, error) {
+	out := new(RetryReply)
+	err := c.cc.Invoke(ctx, DemoService_Retry_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DemoServiceServer is the server API for DemoService service.
 // All implementations must embed UnimplementedDemoServiceServer
 // for forward compatibility
@@ -75,6 +86,7 @@ type DemoServiceServer interface {
 	Ping(context.Context, *PingRequest) (*PingReply, error)
 	Panic(context.Context, *PanicRequest) (*PanicReply, error)
 	CustomCode(context.Context, *CustomCodeRequest) (*CustomCodeReply, error)
+	Retry(context.Context, *RetryRequest) (*RetryReply, error)
 	mustEmbedUnimplementedDemoServiceServer()
 }
 
@@ -90,6 +102,9 @@ func (UnimplementedDemoServiceServer) Panic(context.Context, *PanicRequest) (*Pa
 }
 func (UnimplementedDemoServiceServer) CustomCode(context.Context, *CustomCodeRequest) (*CustomCodeReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CustomCode not implemented")
+}
+func (UnimplementedDemoServiceServer) Retry(context.Context, *RetryRequest) (*RetryReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Retry not implemented")
 }
 func (UnimplementedDemoServiceServer) mustEmbedUnimplementedDemoServiceServer() {}
 
@@ -158,6 +173,24 @@ func _DemoService_CustomCode_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DemoService_Retry_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RetryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DemoServiceServer).Retry(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DemoService_Retry_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DemoServiceServer).Retry(ctx, req.(*RetryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // DemoService_ServiceDesc is the grpc.ServiceDesc for DemoService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -176,6 +209,10 @@ var DemoService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CustomCode",
 			Handler:    _DemoService_CustomCode_Handler,
+		},
+		{
+			MethodName: "Retry",
+			Handler:    _DemoService_Retry_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
