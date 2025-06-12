@@ -1,0 +1,1 @@
+docker build -f client/Dockerfile -t "demo-client:latest" .

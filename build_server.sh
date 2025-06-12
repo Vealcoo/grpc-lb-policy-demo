@@ -1,0 +1,1 @@
+docker build -f server/Dockerfile -t "demo-server:latest" .
