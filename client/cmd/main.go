@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"demo/client/client"
+	"demo/client/conn"
 	"demo/utils/loghelper"
 	"demo/utils/randhelper"
 	"time"
@@ -15,7 +15,7 @@ import (
 func main() {
 	loghelper.InitLogger("demo_client")
 
-	demoClient, err := client.DemoClient("demo-server:8082")
+	demoClient, err := conn.DemoClient("demo-server:8082")
 	if err != nil {
 		log.Fatal().Err(err).Send()
 	}

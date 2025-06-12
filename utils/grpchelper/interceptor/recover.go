@@ -15,14 +15,14 @@ import (
 func ServerRecovery() grpc.UnaryServerInterceptor {
 	return grpc_recovery.UnaryServerInterceptor(
 		grpc_recovery.WithRecoveryHandler(
-			func(p interface{}) (err error) {
+			func(p any) (err error) {
 				msg := fmt.Sprintf("panic: %v", p)
 				stack := string(debug.Stack())
 
 				if pe, ok := p.(error); ok {
 					log.Error().Err(pe).Str("stack", stack).Msg("server panic")
 				} else {
-					log.Error().Err(errors.New("unformat panic error")).Str("stack", stack).Msg("server panic")
+					log.Error().Err(errors.New("unformed panic error")).Str("stack", stack).Msg("server panic")
 				}
 
 				return status.New(codes.Internal, msg).Err()

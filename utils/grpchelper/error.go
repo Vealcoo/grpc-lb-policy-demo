@@ -1,6 +1,8 @@
 package grpchelper
 
 import (
+	"maps"
+
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -17,15 +19,8 @@ func NewGRPCErrorHandler() *ErrorHandler {
 
 func (h *ErrorHandler) SetErrorMap(m map[error]codes.Code) {
 	merge := make(map[error]codes.Code)
-
-	for key, value := range h.errMap {
-		merge[key] = value
-	}
-
-	for key, value := range m {
-		merge[key] = value
-	}
-
+	maps.Copy(merge, h.errMap)
+	maps.Copy(merge, m)
 	h.errMap = merge
 }
 
