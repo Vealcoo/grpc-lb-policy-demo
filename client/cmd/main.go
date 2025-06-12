@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/rs/zerolog/log"
+	"google.golang.org/grpc/codes"
 
 	pb "demo/proto"
 )
@@ -29,11 +30,20 @@ func main() {
 			if err != nil {
 				log.Error().Err(err).Str("method", "Ping").Send()
 			}
-		case randNum > 50:
-			_, err = demoClient.Panic(ctx, &pb.PanicRequest{})
+		case randNum > 50 && randNum <= 55:
+			_, err := demoClient.Panic(ctx, &pb.PanicRequest{})
 			if err != nil {
 				log.Error().Err(err).Str("method", "Panic").Send()
 			}
+		case randNum > 55:
+			_, err := demoClient.CustomCode(ctx, &pb.CustomCodeRequest{
+				Code:    uint32(codes.Unavailable),
+				Message: "for retry test",
+			})
+			if err != nil {
+				log.Error().Err(err).Str("method", "CustomCode").Send()
+			}
+
 		default:
 		}
 		time.Sleep(1000 * time.Millisecond)
